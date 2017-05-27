@@ -8,12 +8,12 @@ import com.badlogic.gdx.math.Vector2;
  */
 
 public class Boneco extends Sprite {
-    private Boolean corpoVisivel;
+//    private Boolean corpoVisivel;
     Vector2 previousPosition;
 
     public Boneco(Texture texture) {
         super(texture);
-        corpoVisivel = false;
+//        corpoVisivel = false;
 //        corpoVisivel = new corpoVisivel(letrasUsadas);
         previousPosition = new Vector2(getX(), getY());
     }
@@ -27,11 +27,11 @@ public class Boneco extends Sprite {
         return false;
     }
 
-    public boolean minimoMembros( ) {
-        if (corpoVisivel == true) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    public boolean minimoMembros( ) {
+//        if (corpoVisivel == true) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 }

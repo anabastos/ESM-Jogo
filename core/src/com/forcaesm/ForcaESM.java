@@ -3,10 +3,12 @@ package com.forcaesm;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,8 +25,10 @@ import com.forcaesm.sprites.Boneco;
 public class ForcaESM extends ApplicationAdapter {
 
 	private final float UPDATE_TIME = 1/60f;
-	float timer;
+
+	float timer = 0;
 	SpriteBatch batch;
+	BitmapFont font;
 	private Socket socket;
 	String id;
 	Boneco boneco;
@@ -42,33 +46,41 @@ public class ForcaESM extends ApplicationAdapter {
 
 	public void updateServer( float dt ) {
 		timer += dt;
-		if ( timer > UPDATE_TIME && boneco != null & boneco.hasMoved()){
-			JSONObject data = new JSONObject();
-			try {
-				data.put("x", boneco.getX());
-				data.put("y", boneco.getY());
-				socket.emit("playerMoved", data);
-			} catch (JSONException e){
-				Gdx.app.log("SOCKET.IO", "Error sending update data");
+		if ( timer > UPDATE_TIME && boneco != null){
+			if( boneco.hasMoved()) {
+				JSONObject data = new JSONObject();
+				try {
+					data.put("x", boneco.getX());
+					data.put("y", boneco.getY());
+					socket.emit("playerMoved", data);
+				} catch (JSONException e) {
+					Gdx.app.log("SOCKET.IO", "Error sending update data");
+				}
 			}
 		}
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		handleInput(Gdx.graphics.getDeltaTime());
 
 		updateServer(Gdx.graphics.getDeltaTime());
 
+		font = new BitmapFont();
+		font.setColor(Color.BLACK);
 		batch.begin();
-		if (boneco != null) {
+		if (boneco != null && bonecos.size() >= 3) {
 			boneco.draw(batch);
+			for (HashMap.Entry<String, Boneco> entry : bonecos.entrySet()) {
+				entry.getValue().draw(batch);
+			}
+		} else {
+
+			font.draw(batch, "Aguardando Jogadores...", 150, 250);
 		}
-		for (HashMap.Entry<String, Boneco> entry : bonecos.entrySet()) {
-			entry.getValue().draw(batch);
-		}
+
 		batch.end();
 	}
 
