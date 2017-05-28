@@ -6,21 +6,20 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.forcaesm.sprites.Boneco;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
-import io.socket.client.Socket;
 import io.socket.client.IO;
+import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
-import com.forcaesm.sprites.Boneco;
 
 public class ForcaESM extends ApplicationAdapter {
 
@@ -71,17 +70,32 @@ public class ForcaESM extends ApplicationAdapter {
 		font = new BitmapFont();
 		font.setColor(Color.BLACK);
 		batch.begin();
-		if (boneco != null && bonecos.size() >= 3) {
+		if (boneco != null && bonecos.size() >= 2) {
+			font.draw(batch, "Ordem", 60, 420);
 			boneco.draw(batch);
+			int height = 400;
+			int count = 1;
+			font.draw(batch, "P" + count, 60, height);
 			for (HashMap.Entry<String, Boneco> entry : bonecos.entrySet()) {
-				entry.getValue().draw(batch);
+				height -= 20;
+				count += 1;
+				font.draw(batch, "P" + count, 60, height);
 			}
+			sortearNomeador();
 		} else {
 
-			font.draw(batch, "Aguardando Jogadores...", 150, 250);
+			font.draw(batch, "Aguardando Jogadores...", 100, 250);
 		}
 
 		batch.end();
+	}
+
+	public void sortearNomeador() {
+//		Random generator = new Random();
+//		Object[] values = bonecos.values().toArray();
+//		Object randomValue = values[generator.nextInt(values.length)];
+//		bonecos.get(b)
+//		font.draw(batch, randomValue.toString(), 100, 100);
 	}
 
 	public void handleInput(float dt){
@@ -109,6 +123,7 @@ public class ForcaESM extends ApplicationAdapter {
 			public void call(Object... args) {
 				Gdx.app.log("SocketIO", "Connected");
 				boneco = new Boneco(bonecoForca);
+
 			}
 		}).on("socketID", new Emitter.Listener() {
 			@Override
