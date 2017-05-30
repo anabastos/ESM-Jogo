@@ -2,7 +2,7 @@
 
 Aplicação do trabalho de Engenharia de Software e Modelagem do Jogo da Forca Multiplayer usando LIBGDX e Socket.io
 
-##### [LINK DA DEMO]https://github.com/anabastos/ESM-Jogo/blob/master/jfesm2.mov/)
+##### [LINK DA DEMO](https://github.com/anabastos/ESM-Jogo/blob/master/jfesm2.mov/)
 
 ### Alunos
 * Ana Luiza - 00127907
